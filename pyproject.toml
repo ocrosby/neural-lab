@@ -1,0 +1,49 @@
+[project]
+name = "neural-lab"
+version = "0.1.0"
+description = "Progressive neural network projects: perceptron → LLM"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=1.26",
+    "torch>=2.5",
+    "matplotlib>=3.9",
+    "torchvision>=0.29.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=5.0",
+    "ruff>=0.7",
+    "mypy>=1.13",
+    "jupyter>=1.1",
+    "ipykernel>=6.29",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["projects", "shared"]
+python_files = ["test_*.py"]
+addopts = "-ra --strict-markers --import-mode=importlib"
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
+# N803/N806: ML/linear-algebra notation uses uppercase for matrices (X, W, A, Z)
+# and lowercase for vectors/scalars (y, b, x_i). This is universal in every NN
+# textbook and reference impl (scikit-learn, PyTorch, HuggingFace). Renaming to
+# satisfy PEP 8 makes the code harder to compare against papers.
+ignore = ["E501", "N803", "N806"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
+
+[tool.coverage.run]
+source = ["projects", "shared"]
+omit = ["*/tests/*", "*/notebook.ipynb"]
